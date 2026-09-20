@@ -15,15 +15,14 @@ export default function Navbar() {
 
         <ul className="nav-links">
           <li><Link href="/">Home</Link></li>
-          <li><Link href="/about">About</Link></li>
-          <li><Link href="/teachers">Teachers</Link></li>
-          <li><Link href="/courses">Courses</Link></li>
           <li><Link href="/contact">Contact</Link></li>
+          <li><Link href="/past-papers">Past Papers</Link></li>
+          <li><Link href="/test-generator">Test Generator</Link></li>
         </ul>
 
         <div className="nav-actions">
           <Link href="/login" className="login-btn">Login</Link>
-          <Link href="/dashboard" className="admission-btn">Dashboard</Link>
+          <Link href="/register" className="admission-btn">Register</Link>
         </div>
       </div>
     </nav>

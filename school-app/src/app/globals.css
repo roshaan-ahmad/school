@@ -1411,3 +1411,703 @@ table td {
     padding: 22px;
   }
 }
+
+
+/* ================================
+   LANDING PAGE ADDITIONS
+================================ */
+.hero-badge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+}
+
+.stat span {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #38bdf8, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat p {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+.card-icon {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+.card-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #38bdf8;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.card-link:hover { color: #a78bfa; }
+
+.cta-section {
+  text-align: center;
+  padding: 4rem 1rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+}
+
+.cta-section h2 { font-size: 2rem; margin-bottom: 0.8rem; }
+.cta-section p { color: rgba(255,255,255,0.65); margin-bottom: 2rem; }
+
+/* ================================
+   AUTH PAGES (Login & Register)
+================================ */
+.auth-page {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 2.5rem;
+  backdrop-filter: blur(16px);
+}
+
+.auth-card-wide { max-width: 560px; }
+
+.auth-header { text-align: center; margin-bottom: 1.8rem; }
+.auth-header h1 { font-size: 1.8rem; font-weight: 800; }
+.auth-header h1 span {
+  background: linear-gradient(135deg, #38bdf8, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.auth-header p { color: rgba(255,255,255,0.6); margin-top: 0.4rem; }
+
+.role-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.role-tab {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 0.9rem;
+}
+
+.role-tab.active {
+  background: linear-gradient(135deg, #38bdf8, #a78bfa);
+  color: #0b0f1a;
+  font-weight: 600;
+}
+
+.auth-form { display: flex; flex-direction: column; gap: 1rem; }
+
+.register-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.register-grid .auth-btn,
+.register-grid .register-btn { grid-column: 1 / -1; }
+
+.input-group input,
+.input-group select,
+.auth-form input,
+.auth-form select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: 0.2s;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.auth-form input:focus,
+.auth-form select:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56,189,248,0.1);
+}
+
+.input-group select option,
+.auth-form select option { background: #0f172a; }
+
+.auth-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+}
+
+.auth-options a { color: #38bdf8; }
+.auth-options label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; }
+.auth-options input[type="checkbox"] { width: auto; }
+
+.auth-btn {
+  padding: 0.85rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #38bdf8, #a78bfa);
+  color: #0b0f1a;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.auth-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+.auth-switch {
+  text-align: center;
+  margin-top: 1.2rem;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+}
+
+.auth-switch a { color: #38bdf8; }
+
+/* ================================
+   CONTACT PAGE
+================================ */
+.contact-page { padding: 2rem 5%; max-width: 1200px; margin: 0 auto; }
+
+.contact-hero {
+  text-align: center;
+  padding: 3rem 1rem;
+  margin-bottom: 3rem;
+}
+
+.contact-hero h1 { font-size: 2.5rem; }
+.contact-hero h1 span {
+  background: linear-gradient(135deg, #38bdf8, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.contact-hero p { color: rgba(255,255,255,0.6); margin-top: 0.5rem; }
+
+.contact-container {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+}
+
+.contact-info {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.contact-info h2 { margin-bottom: 1.5rem; }
+
+.info-item {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: flex-start;
+}
+
+.info-item span { font-size: 1.5rem; }
+.info-item strong { display: block; margin-bottom: 0.2rem; }
+.info-item p { color: rgba(255,255,255,0.6); font-size: 0.9rem; margin: 0; }
+
+.contact-form {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-form h2 { margin-bottom: 0.5rem; }
+
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: 0.2s;
+  resize: vertical;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56,189,248,0.1);
+}
+
+@media (max-width: 768px) {
+  .contact-container { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .register-grid { grid-template-columns: 1fr; }
+}
+
+/* ================================
+   PAST PAPERS PAGE
+================================ */
+.pp-page { padding: 2rem 5%; max-width: 1200px; margin: 0 auto; }
+
+.pp-hero {
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+}
+
+.pp-hero h1 { font-size: 2.5rem; }
+.pp-hero h1 span {
+  background: linear-gradient(135deg, #38bdf8, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.pp-hero p { color: rgba(255,255,255,0.6); margin-top: 0.5rem; }
+
+.pp-filters {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.pp-filters select {
+  padding: 0.7rem 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+}
+
+.pp-filters select option { background: #0f172a; }
+
+.pp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.2rem;
+}
+
+.pp-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 1.5rem;
+  transition: 0.2s;
+}
+
+.pp-card:hover {
+  border-color: rgba(56,189,248,0.4);
+  transform: translateY(-3px);
+}
+
+.pp-card-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+
+.pp-class {
+  background: rgba(56,189,248,0.1);
+  color: #38bdf8;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.pp-type {
+  background: rgba(167,139,250,0.1);
+  color: #a78bfa;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.pp-card h3 { font-size: 1.1rem; margin-bottom: 0.3rem; }
+.pp-card p { color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-bottom: 1rem; }
+
+.pp-download {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid rgba(56,189,248,0.3);
+  border-radius: 8px;
+  background: rgba(56,189,248,0.08);
+  color: #38bdf8;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 0.9rem;
+}
+
+.pp-download:hover { background: rgba(56,189,248,0.15); }
+.pp-empty { color: rgba(255,255,255,0.5); text-align: center; padding: 3rem; grid-column: 1/-1; }
+
+/* ================================
+   TEST GENERATOR PAGE
+================================ */
+.tg-page { padding: 2rem 5%; max-width: 900px; margin: 0 auto; }
+
+.tg-hero {
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+}
+
+.tg-hero h1 { font-size: 2.5rem; }
+.tg-hero h1 span {
+  background: linear-gradient(135deg, #38bdf8, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.tg-hero p { color: rgba(255,255,255,0.6); margin-top: 0.5rem; }
+
+.tg-steps {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.tg-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.85rem;
+}
+
+.tg-step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.tg-step.active { color: #38bdf8; }
+.tg-step.active .tg-step-num { border-color: #38bdf8; color: #38bdf8; }
+.tg-step.done { color: #a78bfa; }
+.tg-step.done .tg-step-num { border-color: #a78bfa; background: #a78bfa; color: #0b0f1a; }
+
+.tg-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 2.5rem;
+}
+
+.tg-step-content h2 { font-size: 1.5rem; margin-bottom: 0.4rem; }
+.tg-step-content > p { color: rgba(255,255,255,0.6); margin-bottom: 1.5rem; }
+
+.tg-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tg-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1.2rem 1rem;
+  background: rgba(255,255,255,0.03);
+  border: 2px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+  text-align: center;
+}
+
+.tg-option:hover { border-color: rgba(56,189,248,0.4); }
+.tg-option.selected { border-color: #38bdf8; background: rgba(56,189,248,0.08); }
+.tg-option strong { color: #fff; font-size: 0.95rem; }
+.tg-option small { color: rgba(255,255,255,0.5); font-size: 0.78rem; }
+.tg-option-icon { font-size: 1.8rem; }
+
+.tg-chapter-select {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tg-chapter-select label { color: rgba(255,255,255,0.7); white-space: nowrap; }
+
+.tg-chapter-select select {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #fff;
+  outline: none;
+}
+
+.tg-chapter-select select option { background: #0f172a; }
+
+.tg-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.tg-nav .btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ================================
+   TEST RESULT / PAPER
+================================ */
+.tg-result { max-width: 900px; margin: 0 auto; }
+
+.tg-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.tg-result-header h2 { font-size: 1.5rem; margin-bottom: 0.3rem; }
+.tg-result-header p { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+.tg-result-actions { display: flex; gap: 0.8rem; }
+
+.test-paper {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.5rem;
+  color: #111;
+}
+
+.test-paper-header { text-align: center; margin-bottom: 1.5rem; border-bottom: 2px solid #111; padding-bottom: 1rem; }
+.test-paper-header h3 { font-size: 1.4rem; color: #111; margin-bottom: 0.8rem; }
+
+.test-meta {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.test-meta span { color: #333; }
+
+.test-section { margin-bottom: 2rem; }
+
+.test-section h4 {
+  font-size: 1rem;
+  color: #111;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.test-section h4 span { color: #555; font-weight: 400; }
+
+.test-question { margin-bottom: 1rem; }
+.test-question p { color: #111; font-size: 0.95rem; margin-bottom: 0.4rem; }
+
+.mcq-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 2rem;
+  padding-left: 1.5rem;
+}
+
+.mcq-options span { color: #333; font-size: 0.9rem; }
+
+@media print {
+  .tg-result-header, .navbar, .footer { display: none; }
+  .test-paper { border-radius: 0; padding: 1rem; }
+}
+
+@media (max-width: 600px) {
+  .tg-options { grid-template-columns: 1fr 1fr; }
+  .tg-card { padding: 1.5rem; }
+  .mcq-options { grid-template-columns: 1fr; }
+}
+
+/* ================================
+   EXAM ELEVATOR — EXTRA STYLES
+================================ */
+.tg-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin: 1.5rem 0 0.7rem;
+}
+.tg-label:first-child { margin-top: 0; }
+.tg-label small { text-transform: none; letter-spacing: 0; font-weight: 400; margin-left: 0.4rem; color: rgba(255,255,255,0.35); }
+
+.tg-sub { color: rgba(255,255,255,0.55); font-size: 0.9rem; margin-bottom: 1.2rem; }
+
+.tg-container { max-width: 860px; margin: 0 auto; }
+
+/* chapter multi-select grid */
+.tg-chapter-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tg-chapter-btn {
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.7);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.tg-chapter-btn:hover { border-color: rgba(56,189,248,0.4); color: #fff; }
+.tg-chapter-btn.selected { border-color: #38bdf8; background: rgba(56,189,248,0.12); color: #38bdf8; font-weight: 600; }
+
+/* text input */
+.tg-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: 0.2s;
+}
+.tg-input:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.1); }
+
+/* info box for AI / Board pattern */
+.tg-info-box {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.2rem 1.5rem;
+  background: rgba(56,189,248,0.06);
+  border: 1px solid rgba(56,189,248,0.2);
+  border-radius: 14px;
+  margin-bottom: 1rem;
+}
+.tg-info-box span { font-size: 2rem; }
+.tg-info-box strong { display: block; margin-bottom: 0.3rem; }
+.tg-info-box p { color: rgba(255,255,255,0.6); font-size: 0.9rem; margin: 0; }
+
+/* custom generation */
+.tg-custom-grid { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+
+.tg-custom-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+}
+
+.tg-custom-label { display: flex; align-items: center; gap: 0.8rem; }
+.tg-custom-label span { font-size: 1.4rem; }
+.tg-custom-label strong { display: block; font-size: 0.95rem; }
+.tg-custom-label small { color: rgba(255,255,255,0.45); font-size: 0.8rem; }
+
+.tg-counter { display: flex; align-items: center; gap: 0.8rem; }
+.tg-counter button {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.tg-counter button:hover { background: rgba(56,189,248,0.15); border-color: #38bdf8; }
+.tg-counter span { min-width: 28px; text-align: center; font-size: 1.1rem; font-weight: 700; }
+
+.tg-custom-total {
+  text-align: right;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.95rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.tg-custom-total strong { color: #38bdf8; font-size: 1.1rem; }
+
+/* choice badge on printed paper */
+.choice-badge {
+  background: rgba(167,139,250,0.15);
+  color: #a78bfa;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.test-section h4 em { font-style: italic; color: #555; font-size: 0.85rem; font-weight: 400; }
