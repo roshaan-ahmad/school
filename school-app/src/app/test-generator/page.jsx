@@ -1,5 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { syllabus, SELECTION_TYPES, SELECTION_CATEGORIES, MARK_OPTIONS, marksConfig, generatePaper } from "./data";
 
 const STEPS = ["Class & Subject", "Selection Type", "Configure", "Generate"];
@@ -93,6 +95,8 @@ function TestPaper({ paper, onReset }) {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 export default function TestGeneratorPage() {
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(null); // null = checking
   const [step, setStep] = useState(1);
   const [paper, setPaper] = useState(null);
 
@@ -120,6 +124,38 @@ export default function TestGeneratorPage() {
   const chapters = classNo && subject && board ? syllabus[classNo]?.[subject]?.[board]?.chapters || [] : [];
   const subjects  = classNo ? Object.keys(syllabus[classNo] || {}) : [];
   const boards    = classNo && subject ? Object.keys(syllabus[classNo]?.[subject] || {}) : [];
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      setIsLoggedIn(false);
+    } else {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  if (isLoggedIn === null) return (
+    <div className="auth-page">
+      <div className="auth-card" style={{ textAlign: "center" }}>
+        <p>Checking authentication...</p>
+      </div>
+    </div>
+  );
+
+  if (isLoggedIn === false) return (
+    <div className="auth-page">
+      <div className="auth-card" style={{ textAlign: "center" }}>
+        <div className="auth-header">
+          <h1>🔒 Access <span>Restricted</span></h1>
+          <p>You need to login or register to use the Test Generator.</p>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginTop: "1.5rem" }}>
+          <Link href="/login" className="auth-btn" style={{ display: "block", textAlign: "center" }}>Login to Continue</Link>
+          <Link href="/register" className="btn secondary" style={{ display: "block", textAlign: "center", padding: "0.85rem", borderRadius: "10px" }}>Create New Account</Link>
+        </div>
+      </div>
+    </div>
+  );
 
   const reset = () => {
     setStep(1); setPaper(null);
