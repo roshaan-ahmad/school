@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { syllabus, SELECTION_TYPES, SELECTION_CATEGORIES, MARK_OPTIONS, marksConfig, generatePaper } from "./data";
+import { syllabus, SELECTION_TYPES, SELECTION_CATEGORIES, MARK_OPTIONS, marksConfig, generatePaper, topicsData } from "./data";
 
 const STEPS = ["Class & Subject", "Selection Type", "Configure", "Generate"];
 
@@ -113,6 +113,8 @@ export default function TestGeneratorPage() {
   const [category, setCategory] = useState("");   // exercise | content | pastpapers | important
   const [selChapters, setSelChapters] = useState([]);
   const [topics, setTopics]     = useState("");
+  const [selTopics, setSelTopics] = useState([]);  // for topicwise chip selection
+  const [topicChapter, setTopicChapter] = useState(""); // chapter selected in topicwise
 
   // Step 3 — marks
   const [hasChoice, setHasChoice] = useState(null); // true | false
@@ -160,12 +162,15 @@ export default function TestGeneratorPage() {
   const reset = () => {
     setStep(1); setPaper(null);
     setClassNo(""); setSubject(""); setBoard(""); setSelType("");
-    setSelMode(""); setCategory(""); setSelChapters([]); setTopics("");
+    setSelMode(""); setCategory(""); setSelChapters([]); setTopics(""); setSelTopics([]); setTopicChapter("");
     setHasChoice(null); setTotalMarks(""); setCustomCounts({ mcq: 10, sq: 5, lq: 2 });
   };
 
   const toggleChapter = (ch) =>
     setSelChapters((prev) => prev.includes(ch) ? prev.filter((c) => c !== ch) : [...prev, ch]);
+
+  const toggleTopic = (tp) =>
+    setSelTopics((prev) => prev.includes(tp) ? prev.filter((t) => t !== tp) : [...prev, tp]);
 
   const canStep1 = classNo && subject && board;
   const canStep2 = !!selType;
@@ -175,7 +180,8 @@ export default function TestGeneratorPage() {
     if (selType === "random" || selType === "self") {
       const needsMarks = hasChoice !== null && totalMarks;
       const needsCategory = !!category;
-      return needsMarks && needsCategory;
+      const needsTopics = selMode === "topicwise" ? selTopics.length > 0 : true;
+      return needsMarks && needsCategory && needsTopics;
     }
     return false;
   };
@@ -183,10 +189,19 @@ export default function TestGeneratorPage() {
   const handleGenerate = () => {
     const result = generatePaper({
       classNo, subject, board, selectionType: selType,
-      selectionMode: selMode, chapters: selChapters, topics,
+      selectionMode: selMode, chapters: selChapters, topics: selTopics.join(", "),
       category, hasChoice, totalMarks: Number(totalMarks),
       customCounts,
     });
+    // Save to localStorage
+    const saved = JSON.parse(localStorage.getItem("savedTests") || "[]");
+    const newTest = {
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString(),
+      config: { classNo, subject, board, selType, selMode, selChapters, topics, category, hasChoice, totalMarks, customCounts },
+      paper: result,
+    };
+    localStorage.setItem("savedTests", JSON.stringify([newTest, ...saved]));
     setPaper(result);
   };
 
@@ -316,9 +331,97 @@ export default function TestGeneratorPage() {
 
                 {selMode === "topicwise" && (
                   <>
-                    <label className="tg-label">Enter Topics <small>(comma separated)</small></label>
-                    <input className="tg-input" placeholder="e.g. Kinematics, Newton's Laws, Gravitation"
-                      value={topics} onChange={(e) => setTopics(e.target.value)} />
+                    <label className="tg-label">Select Chapter <small>(to browse its topics)</small></label>
+                    <div className="tg-chapter-grid" style={{ marginBottom: "1rem" }}>
+                      {chapters.map((ch) => (
+                        <button key={ch} type="button"
+                          className={`tg-chapter-btn ${topicChapter === ch ? "selected" : ""}`}
+                          onClick={() => setTopicChapter(ch)}>
+                          {ch}
+                        </button>
+                      ))}
+                    </div>
+
+                    {topicChapter && (
+                      <>
+                        <label className="tg-label">
+                          Topics — <small style={{ textTransform: "none", letterSpacing: 0, color: "rgba(255,255,255,0.5)" }}>{topicChapter}</small>
+                          {selTopics.length > 0 && (
+                            <span style={{
+                              marginLeft: "0.6rem", padding: "0.1rem 0.55rem",
+                              borderRadius: 999, background: "rgba(56,189,248,0.15)",
+                              border: "1px solid rgba(56,189,248,0.3)",
+                              color: "#38bdf8", fontSize: "0.72rem", fontWeight: 700,
+                              textTransform: "none", letterSpacing: 0,
+                            }}>
+                              {selTopics.length} selected
+                            </span>
+                          )}
+                        </label>
+
+                        {topicsData[topicChapter] ? (
+                          <div className="tg-chapter-grid" style={{ marginBottom: "0.8rem" }}>
+                            {topicsData[topicChapter].map((tp) => (
+                              <button key={tp} type="button"
+                                className={`tg-chapter-btn ${selTopics.includes(tp) ? "selected" : ""}`}
+                                onClick={() => toggleTopic(tp)}>
+                                {selTopics.includes(tp) && <span style={{ marginRight: "5px", fontSize: "0.7rem" }}>✓</span>}
+                                {tp}
+                              </button>
+                            ))}
+                          </div>
+                        ) : (
+                          <div style={{
+                            padding: "1rem 1.2rem", borderRadius: 12,
+                            background: "rgba(255,255,255,0.03)",
+                            border: "1px dashed rgba(255,255,255,0.1)",
+                            color: "rgba(255,255,255,0.45)", fontSize: "0.85rem",
+                            marginBottom: "0.8rem",
+                          }}>
+                            📚 No specific topics listed for this chapter. Questions will be picked from the full chapter.
+                          </div>
+                        )}
+
+                        {selTopics.length > 0 && (
+                          <div style={{
+                            display: "flex", flexWrap: "wrap", gap: "0.4rem",
+                            padding: "0.8rem 1rem", borderRadius: 12,
+                            background: "rgba(56,189,248,0.05)",
+                            border: "1px solid rgba(56,189,248,0.15)",
+                            marginBottom: "0.5rem",
+                          }}>
+                            <span style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.4)", width: "100%", marginBottom: "0.3rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                              Selected Topics
+                            </span>
+                            {selTopics.map((tp) => (
+                              <span key={tp} style={{
+                                display: "inline-flex", alignItems: "center", gap: "0.3rem",
+                                padding: "0.25rem 0.7rem", borderRadius: 8,
+                                background: "rgba(56,189,248,0.12)",
+                                border: "1px solid rgba(56,189,248,0.3)",
+                                color: "#38bdf8", fontSize: "0.78rem", fontWeight: 600,
+                              }}>
+                                {tp}
+                                <button type="button"
+                                  onClick={() => toggleTopic(tp)}
+                                  style={{
+                                    background: "none", border: "none",
+                                    color: "rgba(56,189,248,0.6)", cursor: "pointer",
+                                    fontSize: "0.7rem", padding: 0, lineHeight: 1,
+                                  }}>✕</button>
+                              </span>
+                            ))}
+                            <button type="button"
+                              onClick={() => setSelTopics([])}
+                              style={{
+                                marginLeft: "auto", background: "none", border: "none",
+                                color: "rgba(248,113,113,0.7)", cursor: "pointer",
+                                fontSize: "0.75rem", fontWeight: 600,
+                              }}>Clear all</button>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </>
                 )}
 
