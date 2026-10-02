@@ -1,20 +1,23 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
-const connectDB = async () => {
-  try {
-    if (!process.env.MONGODB_URI) {
-      throw new Error("MONGODB_URI is missing in environment variables");
-    };
+let cached = global._mongoose;
+if (!cached) cached = global._mongoose = { conn: null, promise: null };
 
-    if (mongoose.connections[0].readyState) return;
+export async function connectDB() {
+  if (cached.conn) return cached.conn;
 
-    await mongoose.connect(process.env.MONGODB_URI);
-
-    console.log("MongoDB Connected Successfully...!");
-  } catch (error) {
-    console.error("MongoDB connection failed!!!", error);
-    throw error;
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI missing in .env.local");
   }
-};
 
-export {connectDB}
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 30000,
+      bufferCommands: false,
+    }).then((m) => m);
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
+}

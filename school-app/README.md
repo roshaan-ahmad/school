@@ -16,6 +16,16 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## MongoDB Setup
+
+Generated tests are stored in MongoDB and remain backed up in the browser. Existing tests in the browser's `savedTests` storage are imported the next time the signed-in teacher opens **All Tests**.
+
+1. Create a MongoDB Atlas cluster, database user, and allow your development IP in Network Access.
+2. Copy `.env.example` to `.env.local` and replace the URI placeholders with your Atlas connection details. Keep `.env.local` private; it is ignored by Git.
+3. Restart the Next.js development server.
+
+The teacher login currently uses browser storage rather than server-side authentication. The test API uses the signed-in email to separate records, so add server-side authentication before exposing this API to untrusted users.
+
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

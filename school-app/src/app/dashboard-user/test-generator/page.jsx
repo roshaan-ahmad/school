@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { syllabus, SELECTION_TYPES, SELECTION_CATEGORIES, MARK_OPTIONS, marksConfig, generatePaper, topicsData } from "../../test-generator/data";
+import { getUserEmail, readLocal, saveTest, writeLocal } from "../../lib/saved-tests";
 
 const subjectFA = {
   Mathematics:        { icon: "fa-square-root-variable", color: "#38bdf8" },
@@ -51,7 +52,7 @@ function OptionBtn({ faIcon, color, label, desc, selected, onClick }) {
   );
 }
 
-function TestPaper({ paper, onReset }) {
+function TestPaper({ paper, onReset, saveStatus }) {
   const { mcqs, sqs, lqs, meta } = paper;
   const total = mcqs.length + sqs.length * 3 + lqs.length * 5;
   return (
@@ -60,6 +61,9 @@ function TestPaper({ paper, onReset }) {
         <div className="tg2-result-info">
           <div className="tg2-result-badge"><i className="fa-solid fa-circle-check" /> Paper Ready</div>
           <h2>Test Paper Generated</h2>
+          <p style={{ color: saveStatus === "saved" ? "#34d399" : saveStatus === "local" ? "#fbbf24" : "rgba(255,255,255,0.55)", fontSize: "0.8rem", margin: "0.35rem 0 0" }}>
+            {saveStatus === "saved" ? "Saved to your account" : saveStatus === "local" ? "Saved on this device; MongoDB sync failed" : "Saving test..."}
+          </p>
           <div className="tg2-result-meta">
             <span><i className="fa-solid fa-graduation-cap" /> Class {meta.classNo}</span>
             <span><i className="fa-solid fa-book" /> {meta.subject}</span>
@@ -125,6 +129,7 @@ export default function DashboardTestGenerator() {
   const [hasChoice, setHasChoice]     = useState(null);
   const [totalMarks, setTotalMarks]   = useState("");
   const [customCounts, setCustomCounts] = useState({ mcq: 10, sq: 5, lq: 2 });
+  const [saveStatus, setSaveStatus] = useState("");
 
   const chapters = classNo && subject && board ? syllabus[classNo]?.[subject]?.[board]?.chapters || [] : [];
   const subjects  = classNo ? Object.keys(syllabus[classNo] || {}) : [];
@@ -134,6 +139,7 @@ export default function DashboardTestGenerator() {
     setStep(1); setPaper(null); setClassNo(""); setSubject(""); setBoard("");
     setSelType(""); setSelMode(""); setCategory(""); setSelChapters([]);
     setSelTopics([]); setHasChoice(null); setTotalMarks(""); setCustomCounts({ mcq: 10, sq: 5, lq: 2 });
+    setSaveStatus("");
   };
 
   const toggleChapter = (ch) => setSelChapters(p => p.includes(ch) ? p.filter(c => c !== ch) : [...p, ch]);
@@ -152,17 +158,30 @@ export default function DashboardTestGenerator() {
     return hasChoice !== null && totalMarks && category;
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     const result = generatePaper({
       classNo, subject, board, selectionType: selType,
       selectionMode: selMode, chapters: selChapters,
       topics: selTopics.join(", "), category, hasChoice,
       totalMarks: Number(totalMarks), customCounts,
     });
+    const newTest = {
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString(),
+      config: { classNo, subject, board, selType, selMode, selChapters, selTopics, category, hasChoice, totalMarks, customCounts },
+      paper: result,
+    };
     setPaper(result);
+    setSaveStatus("saving");
+    try {
+      await saveTest(getUserEmail(), newTest);
+      setSaveStatus("saved");
+    } catch (e) {
+      setSaveStatus("saved"); // local save already done
+    }
   };
 
-  if (paper) return <TestPaper paper={paper} onReset={reset} />;
+  if (paper) return <TestPaper paper={paper} onReset={reset} saveStatus={saveStatus} />;
 
   return (
     <div className="tg2-wrap">

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { getCurrentUserEmail, readLocalTests, saveTestToMongo, syncTestsWithMongo, writeLocalTests } from "../../../lib/saved-tests";
 
 const SECTION_META = {
   mcqs: { label: "MCQs",            icon: "fa-circle-dot",   color: "#38bdf8",  marks: 1 },
@@ -17,15 +18,38 @@ export default function EditExamPage() {
   const [editing, setEditing] = useState(null); // { section, index }
   const [editVal, setEditVal] = useState("");
   const [saved, setSaved]     = useState(false);
+  const [saveError, setSaveError] = useState("");
   const [adding, setAdding]   = useState(null); // section key
   const [addVal, setAddVal]   = useState("");
 
   useEffect(() => {
-    const all = JSON.parse(localStorage.getItem("savedTests") || "[]");
-    const found = all.find((t) => t.id === id);
-    if (!found) { router.push("/dashboard-user/all-tests"); return; }
-    setTest(found);
-    setPaper(JSON.parse(JSON.stringify(found.paper))); // deep copy
+    let cancelled = false;
+    const showTest = (all) => {
+      const found = all.find((item) => item.id === id);
+      if (!found) return false;
+      setTest(found);
+      setPaper(JSON.parse(JSON.stringify(found.paper)));
+      return true;
+    };
+
+    const localTests = readLocalTests();
+    const foundLocally = showTest(localTests);
+    const email = getCurrentUserEmail();
+    if (!email) {
+      if (!foundLocally) router.push("/dashboard-user/all-tests");
+      return () => { cancelled = true; };
+    }
+
+    syncTestsWithMongo(email)
+      .then((all) => {
+        if (!cancelled && !showTest(all)) router.push("/dashboard-user/all-tests");
+      })
+      .catch((error) => {
+        console.error("Could not load test from MongoDB:", error);
+        if (!cancelled && !foundLocally) router.push("/dashboard-user/all-tests");
+      });
+
+    return () => { cancelled = true; };
   }, [id]);
 
   if (!test || !paper) return (
@@ -75,12 +99,21 @@ export default function EditExamPage() {
   };
 
   // ── Save to localStorage ──
-  const handleSave = () => {
-    const all = JSON.parse(localStorage.getItem("savedTests") || "[]");
-    const updated = all.map((t) => t.id === id ? { ...t, paper } : t);
-    localStorage.setItem("savedTests", JSON.stringify(updated));
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+  const handleSave = async () => {
+    const updatedTest = { ...test, paper };
+    const all = readLocalTests();
+    writeLocalTests(all.map((item) => item.id === id ? updatedTest : item));
+    setSaveError("");
+    try {
+      await saveTestToMongo(getCurrentUserEmail(), updatedTest);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    } catch (error) {
+      console.error("Could not save edited test to MongoDB:", error);
+      writeLocalTests(readLocalTests().map((item) => item.id === id ? { ...updatedTest, syncPending: true } : item));
+      setSaved(false);
+      setSaveError("Changes are on this device, but MongoDB sync failed.");
+    }
   };
 
   return (
@@ -114,7 +147,7 @@ export default function EditExamPage() {
           </div>
         </div>
 
-        <div style={{ display: "flex", gap: "0.7rem" }}>
+        <div style={{ display: "flex", gap: "0.7rem", flexWrap: "wrap" }}>
           <button onClick={() => window.print()}
             style={{
               display: "flex", alignItems: "center", gap: "0.4rem",
@@ -138,6 +171,8 @@ export default function EditExamPage() {
           </button>
         </div>
       </div>
+
+      {saveError && <p role="alert" style={{ color: "#fbbf24", fontSize: "0.82rem", margin: "-0.7rem 0 1rem" }}>{saveError}</p>}
 
       {/* Sections */}
       {(["mcqs", "sqs", "lqs"]).map((sec) => {
